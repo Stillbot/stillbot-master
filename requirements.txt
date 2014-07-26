@@ -1,1 +1,9 @@
 git+https://github.com/thearn/Python-Arduino-Command-API.git
+Markdown==2.4.1
+django-filter==0.7
+djangorestframework==2.3.14
+Django==1.6.5
+Werkzeug==0.9.6
+django-extensions==1.3.8
+django-model-utils==2.1.0
+ipython==2.1.0
