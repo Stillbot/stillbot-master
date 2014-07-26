@@ -56,4 +56,4 @@ docs/_build/
 .*.swp
 *.sqlite3
 *.sqlite
-static
+static_collected

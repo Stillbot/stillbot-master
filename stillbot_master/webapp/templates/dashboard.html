@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src="{{ STATIC_URL }}d3.min.js" charset="utf-8"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+
+        <!--[if lt IE 8]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        Hi :0 
+        <div id="demo" style="text-align: center;"></div>
+        <script>
+            // Trim 'Z' and microseconds off the end.
+            var pyDateFormatter = function(pythonDate) {
+                return pythonDate.substring(0, pythonDate.length - 5);
+            }
+            JSONData = [
+                {
+                    "url": "http://localhost:8000/api/v1/temperatures/956/", 
+                    "thermistor": "http://localhost:8000/api/v1/thermistors/1/", 
+                    "temp": "20.75", 
+                    "created_on": "2014-07-26T14:51:02.732Z"
+                }, 
+                {
+                    "url": "http://localhost:8000/api/v1/temperatures/957/", 
+                    "thermistor": "http://localhost:8000/api/v1/thermistors/2/", 
+                    "temp": "22.19", 
+                    "created_on": "2014-07-26T14:51:03.737Z"
+                }, 
+                {
+                    "url": "http://localhost:8000/api/v1/temperatures/958/", 
+                    "thermistor": "http://localhost:8000/api/v1/thermistors/1/", 
+                    "temp": "26.69", 
+                    "created_on": "2014-07-26T14:51:03.835Z"
+                }, 
+                {
+                    "url": "http://localhost:8000/api/v1/temperatures/959/", 
+                    "thermistor": "http://localhost:8000/api/v1/thermistors/2/", 
+                    "temp": "27.25", 
+                    "created_on": "2014-07-26T14:51:04.840Z"
+                }, 
+                {
+                    "url": "http://localhost:8000/api/v1/temperatures/960/", 
+                    "thermistor": "http://localhost:8000/api/v1/thermistors/1/", 
+                    "temp": "28.69", 
+                    "created_on": "2014-07-26T14:51:04.938Z"
+                }
+            ];
+            var svg = d3.select("#demo").append("svg:svg")
+              .attr("width", 300)
+              .attr("height", 200)
+              .attr("style", "border-style: groove;");
+
+            /*
+             * http://www.macwright.org/presentations/dcjq/
+             */
+            var drawGraph = function(data) {
+              // These have to be set for the graph to display properly (avoid squishing, clipping, etc)
+              var PAD_DATE = 30;
+              var MIN_DATE = 10;
+              var MAX_DATE = 250;
+              
+              var PAD_TEMP = 25;
+              var MIN_TEMP = 10;
+              var MAX_TEMP = 125;
+
+              var format = d3.time.format("%Y-%m-%dT%X")
+              var tempFn = function(d) { return d.temp }
+              var dateFn = function(d) { return format.parse(pyDateFormatter(d.created_on)) }
+
+              var x = d3.time.scale()
+                .domain(d3.extent(data, dateFn))
+                .range([MIN_DATE, MAX_DATE + PAD_DATE])
+
+              var y = d3.scale.linear()
+                //.domain([0, 125])                         // data range coming in
+                .domain(d3.extent(data, tempFn))            // extent() automatically finds the min/max
+                .range([MAX_TEMP + PAD_TEMP, MIN_TEMP])     // Our range of representation
+              
+              svg.selectAll("circle").data(data).enter()
+               .append("svg:circle")
+               .attr("r", 4)
+               .attr("cx", function(d) { return x(dateFn(d)) })
+               .attr("cy", function(d) { return y(tempFn(d)) }) 
+            };
+
+            d3.json('http://localhost:8000/api/v1/temperatures/', function(error, json) {
+                if (error) return console.warn(error);
+                drawGraph(json);
+            });
+        </script>
+    </body>
