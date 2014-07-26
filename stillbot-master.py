@@ -26,19 +26,29 @@ class StillbotMaster(Arduino.Arduino):
 
 if __name__ == '__main__':
     import time
+    import argparse
 
-    print('Connecting to Arduino..')
+    parser = argparse.ArgumentParser(prog='stillbot-master.py',
+                                     description='The stillbot master controller.')
+    parser.add_argument('--interval', nargs='?', const=1, default=1, type=int,
+                        help='The delay (in seconds) between fetching data from the slave (default: 1s)')
+    args = parser.parse_args()
+
+    print('Connecting to slave..')
     bot = StillbotMaster()
     num_of_thermistors = bot.thermistorCount()
     print('There are %s thermistors connected.\n' % num_of_thermistors)
 
     from stillbot_master.webapp.models import Thermistor, Temperature
     thermistors = [Thermistor.objects.get_or_create(index=i)[0] for i in xrange(0, num_of_thermistors)]
+    thermistors = sorted(thermistors, key=lambda t: t.index)
+
+    # @BUG: The temperature output is inconsistent when the interval is set at anything other than 1
+    print('Now polling the slave at %s second intervals..' % args.interval)
     while True:
         for thermistor in thermistors:
-            temp = bot.thermistorTemp(thermistor.index)
-            Temperature.objects.create(thermistor=thermistor, temp=temp)
-            print('#%s: %s' % (thermistor.index, temp))
-        time.sleep(1)
+            t = Temperature.objects.create(thermistor=thermistor,
+                                           temp=bot.thermistorTemp(thermistor.index))
+            print('#%s: %s' % (thermistor.index, thermistor.latest_temp))
+        time.sleep(args.interval)
         print('\n')
-
