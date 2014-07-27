@@ -12,7 +12,7 @@ class Thermistor(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return 'model=%s index=%s' % (self.model, self.index)
+        return "index=%s model='%s' name='%s'" % (self.index, self.model, self.name or '')
 
     @property
     def latest_temp(self):
@@ -20,7 +20,7 @@ class Thermistor(models.Model):
 
 
 class Temperature(models.Model):
-    thermistor = models.ForeignKey(Thermistor)
+    thermistor = models.ForeignKey(Thermistor, related_name='temperatures')
     temp = models.DecimalField(max_digits=5, decimal_places=2)
     created_on = models.DateTimeField(auto_now_add=True)
 
