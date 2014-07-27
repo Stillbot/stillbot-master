@@ -1,23 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.models import User, Group
 from webapp.models import Thermistor, Temperature
+from webapp.views import *
 from django.views.generic import TemplateView
-from rest_framework import viewsets, routers
+from rest_framework import routers
 from django.contrib import admin
 admin.autodiscover()
 
-# ViewSets define the view behaviour
-class UserViewSet(viewsets.ModelViewSet):
-    model = User
-
-class GroupViewSet(viewsets.ModelViewSet):
-    model = Group
-
-class TemperatureViewSet(viewsets.ModelViewSet):
-    model = Temperature
-
-class ThermistorViewSet(viewsets.ModelViewSet):
-    model = Thermistor
 
 # Routers provide an easy way of automatically determing the URL conf.
 #
@@ -26,9 +15,9 @@ class ThermistorViewSet(viewsets.ModelViewSet):
 # 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'gropus', GroupViewSet)
-router.register(r'temperatures', TemperatureViewSet)
+router.register(r'groups', GroupViewSet)
 router.register(r'thermistors', ThermistorViewSet)
+router.register(r'temperatures', TemperatureViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browseable API.
