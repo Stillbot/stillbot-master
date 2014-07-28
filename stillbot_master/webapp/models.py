@@ -16,7 +16,7 @@ class Thermistor(models.Model):
 
     @property
     def latest_temp(self):
-        return Temperature.objects.filter(thermistor=self).last().temp
+        return Temperature.objects.filter(thermistor=self).first().temp
 
 
 class Temperature(models.Model):
@@ -26,3 +26,7 @@ class Temperature(models.Model):
 
     def __str__(self):
         return 'thermistor=%s temp=%s' % (self.thermistor.index, self.temp)
+
+    class Meta:
+        get_latest_by = 'created_on'
+        ordering = ['-created_on']

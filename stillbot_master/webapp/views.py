@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from .serializers import ThermistorSerializer, TemperatureSerializer
 from .models import Thermistor, Temperature
 from django.contrib.auth.models import User, Group
-from rest_framework import generics
+from rest_framework import generics, filters
 
 
 class ThermistorViewSet(viewsets.ModelViewSet):
@@ -14,6 +14,8 @@ class TemperatureViewSet(viewsets.ModelViewSet):
     queryset = Temperature.objects.all()
     serializer_class = TemperatureSerializer
     filter_fields = ('thermistor', 'thermistor__index', 'created_on', )
+    filtering_backends = (filters.OrderingFilter, filters.DjangoFilterBackend)
+    ordering = ('-created_on', )
 
 
 class UserViewSet(viewsets.ModelViewSet):
