@@ -26,11 +26,11 @@ $(function () {
         $.getJSON("http://localhost:8000/api/v1/temperatures/", {thermistor__index: THERMISTOR}, function(data) {
           var graph_data = [];
           $.each(data.results, function(i, obj) {
-            console.log(obj.thermistor + ': ' + obj.temp);
-            // NOTE: multiplying by 1000 seems to initialize the graph size properly
+            //console.log(obj.thermistor + ': ' + obj.temp);
+            // NOTE: multiplying x by 1000 used to initialize the graph size properly
             graph_data.push({x: (new Date(obj.created_on)).getTime(), y: Number(obj.temp)});
           });
-          console.log(graph_data);
+          //console.log(graph_data);
           createGraph(graph_data);
         });
 
@@ -51,11 +51,9 @@ $(function () {
                             setInterval(function() {
                                 $.getJSON("http://localhost:8000/api/v1/temperatures/", {thermistor__index: THERMISTOR}, function(data) {
                                     data = data.results;
-                                    //var x = (new Date()).getTime(), // current time
-                                    //    y = Math.random(0, 40);
                                     var x = (new Date(data[0].created_on)).getTime(),
                                         y = Number(data[0].temp);
-                                    console.log('new data: ' + x + ', ' + y);
+                                    //console.log('new data: ' + x + ', ' + y);
                                     series.addPoint([x, y], true, true);
                                 });
                             }, 1000);
@@ -100,20 +98,20 @@ $(function () {
                 },
                 series: [{
                     name: 'Temperature',
-                    data: data/*(function() {
+                    data: (function() {
 
-                        //var data = [],
+                        var empty_data = [];
                         var    time = (new Date()).getTime(),
                             i;
         
                         for (i = -19; i <= 0; i++) {
-                            data.push({
+                            empty_data.push({
                                 x: time + i * 1000,
-                                y: 0//Math.random()
+                                y: 0
                             });
                         }
-                        return data;
-                    })()*/
+                        return empty_data;
+                    })()
                 }]
             });
         };

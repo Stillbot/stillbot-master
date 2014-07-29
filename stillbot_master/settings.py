@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'south',
     'stillbot_master.webapp',
+    'gunicorn',
 )
 
 MIDDLEWARE_CLASSES = (

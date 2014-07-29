@@ -30,3 +30,9 @@ class Temperature(models.Model):
     class Meta:
         get_latest_by = 'created_on'
         ordering = ['-created_on']
+
+
+class Boiler(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    is_on = models.BooleanField(default=False, blank=False)

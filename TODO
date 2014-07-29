@@ -1,6 +1,5 @@
 TODO
 ====
 
-* create Web 2.bl0wz frontend with pretty live-updated graphs
-* convert stillbot-master.py into a manage.py command
-* integrate django-style filtering on API query params using django-rest-framework-chain
+* Flesh out rest of arduino.py
+* Consider how the django app will consume the data
