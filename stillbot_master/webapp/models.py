@@ -1,6 +1,13 @@
 from django.db import models
 
 
+class Session(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    finished_on = models.DateTimeField(null=True, blank=True)
+
+
 class Thermistor(models.Model):
     CHOICES = (
             ('DS18B20', 'DS18B20'),
@@ -20,6 +27,7 @@ class Thermistor(models.Model):
 
 
 class Temperature(models.Model):
+    sesh = models.ForeignKey(Session, null=True, blank=True)
     thermistor = models.ForeignKey(Thermistor, related_name='temperatures')
     temp = models.DecimalField(max_digits=5, decimal_places=2)
     created_on = models.DateTimeField(auto_now_add=True)
