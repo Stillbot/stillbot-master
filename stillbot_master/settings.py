@@ -30,7 +30,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +41,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'south',
     'stillbot_master.webapp',
+    'stillbot_master.brew_master',
     'gunicorn',
 )
 

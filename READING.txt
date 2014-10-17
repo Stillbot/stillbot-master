@@ -1,0 +1,1 @@
+https://github.com/firmata/pyduino - Firmata is a generic protocol for talking to microcontrollers from a host computer
